@@ -35,7 +35,33 @@ namespace Lab5
         public void Task2(int[,] matrix)
         {
             // code here
-            
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            for (int i = 0; i < rows; i++)
+            {
+                int maxVal = matrix[i, 0];
+                int maxCol = 0;
+                for (int j = 1; j < cols; j++)
+                {
+                    if (matrix[i, j] > maxVal)
+                    {
+                        maxVal = matrix[i, j];
+                        maxCol = j;
+                    }
+                }
+
+                if (maxVal != 0)
+                {
+                    for (int j = 0; j < maxCol; j++)
+                    {
+                        if (matrix[i, j] < 0)
+                        {
+                            matrix[i, j] = (int)Math.Floor((double)matrix[i, j] / maxVal);
+                        }
+                    }
+                }
+            }
             // end
 
         }
@@ -110,7 +136,47 @@ namespace Lab5
         {
             int[,] answer = null;
             // code here
-            
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            if (rows == 1)
+            {
+                answer = new int[0, 0];
+            }
+            else
+            {
+                int maxRow = 0;
+                int maxSum = -1;
+
+                for (int i = 0; i < rows; i++)
+                {
+                    int sum = 0;
+                    for (int j = 0; j < cols; j++)
+                    {
+                        if (matrix[i, j] > 0)
+                        {
+                            sum += matrix[i, j];
+                        }
+                    }
+                    if (sum > maxSum)
+                    {
+                        maxSum = sum;
+                        maxRow = i;
+                    }
+                }
+
+                answer = new int[rows - 1, cols];
+                int r = 0;
+                for (int i = 0; i < rows; i++)
+                {
+                    if (i == maxRow) continue;
+                    for (int j = 0; j < cols; j++)
+                    {
+                        answer[r, j] = matrix[i, j];
+                    }
+                    r++;
+                }
+            }
             // end
             return answer;
         }
@@ -253,7 +319,19 @@ namespace Lab5
         {
 
             // code here
-            
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            if (rows == cols)
+            {
+                for (int i = 0; i < rows; i++)
+                {
+                    matrix[0, i] = 0;
+                    matrix[rows - 1, i] = 0;
+                    matrix[i, 0] = 0;
+                    matrix[i, cols - 1] = 0;
+                }
+            }
             // end
 
         }
@@ -263,7 +341,29 @@ namespace Lab5
 
             int[,] answer = null;
             // code here
-            
+            int n = matrix.GetLength(0);
+            if (n == matrix.GetLength(1))
+            {
+                A = new int[n * (n + 1) / 2];
+                B = new int[n * (n - 1) / 2];
+                int idxA = 0;
+                int idxB = 0;
+
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (j >= i)
+                        {
+                            A[idxA++] = matrix[i, j];
+                        }
+                        else
+                        {
+                            B[idxB++] = matrix[i, j];
+                        }
+                    }
+                }
+            }
             // end
             return (A, B);
         }
@@ -306,8 +406,37 @@ namespace Lab5
         {
 
             // code here
-            
-           
+            int n = array.Length;
+            if (n > 1)
+            {
+                int[] sums = new int[n];
+                for (int i = 0; i < n; i++)
+                {
+                    int s = 0;
+                    for (int j = 0; j < array[i].Length; j++)
+                    {
+                        s += array[i][j];
+                    }
+                    sums[i] = s;
+                }
+
+                for (int i = 1; i < n; i++)
+                {
+                    int[] row = array[i];
+                    int s = sums[i];
+                    int j = i - 1;
+
+                    while (j >= 0 && (array[j].Length < row.Length || (array[j].Length == row.Length && sums[j] < s)))
+                    {
+                        array[j + 1] = array[j];
+                        sums[j + 1] = sums[j];
+                        j--;
+                    }
+
+                    array[j + 1] = row;
+                    sums[j + 1] = s;
+                }
+            }
             // end
 
         }
